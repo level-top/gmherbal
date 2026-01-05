@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SiteHeader } from "@/app/_components/SiteHeader";
 import { BuySection } from "@/app/_components/BuySection";
+import { WhatsappButton } from "@/app/_components/WhatsappButton";
 import { prisma } from "@/lib/prisma";
 import { BRAND } from "@/lib/constants";
 import { ShopProductsClient } from "@/app/shop/ShopProductsClient";
@@ -122,6 +123,11 @@ export default async function ShopPage() {
           </div>
         </div>
       </footer>
+
+      <WhatsappButton
+        phoneE164NoPlus={BRAND.whatsappNumberE164NoPlus}
+        defaultText="Assalam o Alaikum, I need help choosing products from the shop. Please guide me about Purified vs Unpurified and available sizes."
+      />
     </div>
   );
 }
