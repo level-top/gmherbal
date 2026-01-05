@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <rect x="16" y="16" width="224" height="224" rx="48" fill="currentColor" opacity="0.08"/>
+  <path d="M84 146c26-6 46-25 54-52 15 12 26 30 26 52 0 32-26 58-58 58s-58-26-58-58c0-12 4-23 10-32 0 0 2 26 26 32z" fill="currentColor"/>
+  <path d="M170 78c-22 8-38 26-44 48-12-10-20-24-20-41 0-30 24-54 54-54 10 0 19 3 27 8-2 15-8 29-17 39z" fill="currentColor" opacity="0.9"/>
+  <text x="128" y="224" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="20" font-weight="700" fill="currentColor">gmherbal</text>
+</svg>

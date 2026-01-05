@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" fill="none">
+  <rect width="960" height="720" rx="48" fill="#ffffff"/>
+  <rect x="32" y="32" width="896" height="656" rx="40" stroke="#e5e7eb" stroke-width="2"/>
+
+  <rect x="96" y="120" width="768" height="480" rx="36" fill="#f8fafc"/>
+
+  <!-- Jar -->
+  <rect x="352" y="178" width="256" height="64" rx="20" fill="#0f172a" opacity="0.06"/>
+  <rect x="338" y="228" width="284" height="336" rx="52" fill="#fff7ed" stroke="#fed7aa" stroke-width="2"/>
+  <rect x="362" y="272" width="236" height="104" rx="22" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="2"/>
+
+  <!-- Ghee swirl -->
+  <path d="M392 466c42-36 134-28 176-76 18-20 18-48-6-64" stroke="#f59e0b" stroke-width="10" stroke-linecap="round"/>
+  <path d="M406 520c30-26 94-18 126-48 14-12 14-30-4-40" stroke="#fbbf24" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- Label text -->
+  <text x="480" y="328" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="34" font-weight="800" fill="#065f46">Desi Ghee</text>
+  <text x="480" y="360" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="16" font-weight="600" fill="#047857">gmherbal</text>
+
+  <!-- Bottom caption -->
+  <text x="480" y="650" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="18" font-weight="700" fill="#0f172a" opacity="0.75">Pure • Traditional • Fresh</text>
+</svg>

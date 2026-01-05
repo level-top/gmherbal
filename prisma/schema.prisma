@@ -1,0 +1,264 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum PartnerStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+enum OrderStatus {
+  NEW
+  CONFIRMED
+  SHIPPED
+  CANCELLED
+}
+
+enum OrderSource {
+  PUBLIC
+  PARTNER
+}
+
+enum PartnerPayoutStatus {
+  PENDING
+  PAID
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String   @db.Text
+
+  categoryId  String?
+  oilTypeId   String?
+  variantId   String?
+  extractionId String?
+
+  category    ProductCategoryOption? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  oilType     OilTypeOption? @relation(fields: [oilTypeId], references: [id], onDelete: SetNull)
+  variant     ProductVariantOption? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  extraction  ExtractionMethodOption? @relation(fields: [extractionId], references: [id], onDelete: SetNull)
+
+  sizeLabel   String?
+  /// Price in PKR (no cents).
+  price       Int?
+  imageUrl    String?
+  isFeatured  Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orders Order[]
+  orderItems OrderItem[]
+  testimonials Testimonial[]
+
+  @@index([isActive])
+  @@index([categoryId])
+  @@index([oilTypeId])
+  @@index([variantId])
+  @@index([extractionId])
+  @@index([isFeatured])
+  @@index([sortOrder])
+}
+
+model ProductCategoryOption {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products   Product[]
+
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+model OilTypeOption {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products   Product[]
+
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+model ProductVariantOption {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products   Product[]
+
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+model ExtractionMethodOption {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products   Product[]
+
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+model Faq {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String   @db.Text
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([sortOrder])
+  @@index([createdAt])
+}
+
+model Certification {
+  id        String   @id @default(cuid())
+  title     String
+  authority String
+  refNo     String?
+  imageUrl  String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+}
+
+model Testimonial {
+  id           String   @id @default(cuid())
+  productId    String?
+  customerName String
+  city         String?
+  content      String   @db.Text
+  videoUrl     String?
+  rating       Int?
+  isApproved   Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([productId])
+  @@index([isApproved])
+  @@index([createdAt])
+}
+
+model Partner {
+  id        String        @id @default(cuid())
+  name      String
+  email     String?       @unique
+  phone     String?
+  passwordHash String?    @db.Text
+  payoutMethod        String?
+  payoutAccountName   String?
+  payoutAccountNumber String?
+  payoutBankName      String?
+  payoutIban          String?
+  payoutPhone         String?
+  payoutNotes         String? @db.Text
+  status    PartnerStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  apiKeys ApiKey[]
+  orders  Order[]
+}
+
+model ApiKey {
+  id         String   @id @default(cuid())
+  partnerId  String
+  prefix     String   @unique
+  keyHash    String   @db.VarChar(64)
+  encryptedKey String? @db.Text
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  lastUsedAt DateTime?
+
+  partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+
+  @@index([partnerId])
+  @@index([isActive])
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  productId  String?
+  source     OrderSource @default(PUBLIC)
+  partnerId  String?
+  status     OrderStatus @default(NEW)
+  name       String
+  fatherName String
+  address    String      @db.Text
+  phone1     String
+  phone2     String?
+  totalBaseAmount    Int?
+  totalPartnerAmount Int?
+  partnerProfit      Int?
+  partnerPayoutStatus PartnerPayoutStatus?
+  partnerPayoutPaidAt DateTime?
+  createdAt  DateTime    @default(now())
+
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  partner Partner? @relation(fields: [partnerId], references: [id], onDelete: SetNull)
+  items   OrderItem[]
+
+  @@index([status])
+  @@index([source])
+  @@index([partnerId])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id              String   @id @default(cuid())
+  orderId         String
+  productId       String?
+  productName     String
+  quantity        Int
+  baseUnitPrice   Int
+  partnerUnitPrice Int
+  createdAt       DateTime @default(now())
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([productId])
+  @@index([createdAt])
+}

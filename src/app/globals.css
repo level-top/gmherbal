@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  /* Primary brand colors */
+  --color-forest: #2F5D3A;
+  --color-forest-hover: #24492E;
+  --color-gold: #D4A017;
+  --color-gold-hover: #B98A0E;
+
+  /* WhatsApp */
+  --color-whatsapp: #25D366;
+  --color-whatsapp-hover: #1FB85A;
+
+  /* Secondary support colors */
+  --color-leaf: #6FAF7A;
+  --color-earth: #7A4A2E;
+
+  /* Background & surfaces */
+  --color-bg: #FBF9F3;
+  --color-surface: #F5F1E8;
+
+  /* Text */
+  --color-heading: #1E2E24;
+  --color-body: #3E4A42;
+  --color-muted: #7A857C;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@layer base {
+  body {
+    @apply min-h-screen bg-bg text-body antialiased;
+  }
+}
